@@ -24,8 +24,89 @@ The core of the power supply is a Royer converter for wireless power transfer. T
 As the supply voltage can be vary from 12 to 24 V, a step down converter is used to generate a variable voltage between 1.7V and 6.0V, which can be adjusted via a potentiometer. The voltage range corresponds to the specified operating range of the CD motor. The supply of the motor can be interrupted with a switch, for example to allow programming of the microcontrollers.
 
 ## 6. Display Board
-The 56 LEDs of the display board are driven by 7 cascaded 24-bit shift registers. The registers load the serial data stream from one of the SPI interfaces of the RP2040. The microcontroller generates separate "LED enable" signal for the R, G, B LEDs, respectively. This allows for white balancing (not implemented yet). The STP24DP05BTR LED current sink controller sets the LED current to 20mA each. The maximum current per register would therefore be 480mA, if all LEDs were on, simultaneously and continuously. Theoretically, the current of the 56 LEDs could add up to 3.3A, which, at 5V, would correspond to 16.5 W. This is significantly beyond the capability of the wireless power supply. However, the current can be controlled by the RP2040 microcontroller by setting the duty cycle appropriately. 
+The 56 LEDs of the display board are driven by 7 cascaded 24-bit shift registers. The registers load the serial data stream from one of the SPI interfaces of the RP2040. The microcontroller generates separate "LED enable" signal for the R, G, B LEDs, respectively. This allows for white balancing (not implemented yet). The STP24DP05BTR LED current sink controller sets the LED current to 20mA each. The maximum current per register would therefore be 480mA, if all LEDs were on, simultaneously and continuously. Theoretically, the current of the 56 LEDs could add up to 3.3A, which, at 5V, would correspond to 16.5 W. This is significantly beyond the capability of the wireless power supply. However, the current can be controlled by the RP2040 microcontroller by setting the duty cycle appropriately.
+Displaying color is based on additive color mixing. The three primary colors, red, green, and blue are mixed with different intensities. For example red and green combined at equal intensity make yellow. However, the circuit only allows the LEDs to be either on or off. Intensity can only be set using pulse width modulation. In order to synchronize PWM with the rotation of the disk, each pixel is devided into 8 sub-pixels. This allows for setting the intensity in 8 steps for red, green, and blue, respectively. The color space can be displayed with 8 x 8 x 8 = 512 colors. Each pixel is divided into 8 sub-pixels. This allows for pulse width modulation of the LED intensity. The intensity resolution is 8 steps for red, green, and blue, respectively. On the right hand side there is a photo of some of the pixels of the running display.
 
+** RP2040 interrupts and timing**
+The SPI interface is operated with a clock rate of 25 MHz. The 168 bits (56 RGB LEDs, 3 colors each) are therefore transferred in 168 x 1/25MHz = 6.7µs. Assuming a maximum rotation speed of the display of 1200 RPM, this corresponds to 50ms per revolution. At one full rotation of the display 240 pixels with 8 sub-pixels each are output per LED. This corresponds to 26µs per sub-pixel. Thus, the transmission time via the SPI bus (6.7µs) is significantly shorter than the display time per sub-pixel.
+
+The idea of using two microcontrollers (RP2040 and ESP32-S3) is essentially to separate the very time-critical timing of the LED control from the computationally intensive and asynchronous image generation and internet communication. In this way, the RP2040 is relieved to the maximum and the display of the image is extremely stable.The software of the RP2040 programmed in C consists of two short interrupt routines. The first routine ("HallIRQ") is triggered by the Hall sensor exactly once for each full rotation. This routine starts a timer, which sets the duration for which a single row of 56 color pixels is displayed. Once the timer expires, it is automatically restarted and a second interrupt routine is triggered ("PixelIRQ"). In this second routine the bit pattern of the LEDs is updated. So in this way a new LED pattern appears with each expiration of the timer. It is important that the timer restarts automatically (hardware controlled). Otherwise there could be a delay if the processor cannot start the interrupt routine immediately (because another routine prevents this, for example).
+
+Another important function is to set the duration of the timer 1 so that exactly 240 x 8 = 1920 pixel rows per turn are output. For this purpose, the variable "tpt" (time per turn) is increased by the set value of the timer with each call of PixelIRQ. The routine HallTRQ can read tpt and thus knows the exact time duration for one revolution - even if it consists of more or less than 1920 timer cycles. The new time per pixel (tpt/240) is then calculated from this value and the timer is set accordingly.
+
+To control the image brightness of the red, green, and blue LEDs, the threshold function of the timer is used: as soon as a programmable threshold for R, G, and B is exceeded, an output of the RP2040 switches. The three signals are used to switch on the respective LEDs for the selected time. Controlling the brightness of R, G, and B separately allows to adjust the relative brightness of the three channels and therefore to shift the white point and thus color balancing the display. However, it has turned out that the LEDs are calibrated such that a reasonable "white" is achieved when the LED current is set to 20 mA for the three LEDs, respectively.
+
+** ESP32-S3 for Internet communication and image generation **
+The microcontroller ESP32 has a Wifi module for internet communication. The antenna of the controller is placed at the edge of the display board, because the interference field of the wireless power supply is lowest there.
+Although a concern in the beginning of the development, it turned out that the fast rotation of the display does not lead to any noticeable impairment of the Wifi connection.
+
+** Programming of the microcontrollers **
+
+The RP2040 can be programmed via a USB-C socket. During programming the power supply of the display needs to be on. Should there be a connection problem between the RP2040 and the programming computer, it helps to start the controller in boot mode. In order to do so, push and hold the RP2040 boot button while powering on the device. Once power is on, you can release the button.
+
+Programming the ESP32S3 via its USB-C connector is easy and reliable as well. There is also a boot button, which can be used for initializing the controller.
+
+Please note that the HTML, CSS and JS code of the user interface webpages has to be loaded onto the micro SD card. Make sure to properly formate (FAT16) the card before copying the data. You need to copy all files and folders in the "data" subfolder of the ESP32 directory of the repository to the root level of the SD card. When done, there. should be the folders "html", "variables", and "images" on the highest level of the SD card.
+
+# 7. The Software of the ESP32
+The ESP-32 handles the generation of the image data and its transmission to the RP2040 (rouphly 10 times per second). The displayed information (time and weather data) is retrieved from the Internet or read from the SD card (still images and animated images). Furthermore, the microcontroller serves as a simple HTML web server that can be accessed by any browser to control the display.
+
+** Generation of the image data**
+Even though the resolution of the display achieved with the 56 color LEDs is relatively low, it is sufficient to display images and text upright, undistorted and therefore easily readable. The image data is generated in a rectangular pixel matrix (i.e. a cartesian coordinate system) with 110 x 110 pixels. This bitmap then has to be transformed into the polar coordinate system of the rotating LED rows, before it is transferred to the RP2040. To make the transformation fast, a lookup table is used, which transforms the x,y coordinates of the bitmap into the r, theta coordinates of the rotating LED lines. The transformation also takes into account the alternating order of the LEDs between the two halfs of the row.
+
+** Control of the display via web interface**
+For the implementation of the web server the library ESPAsyncWebServer is used. It has the advantage that the server activity runs in the background independent of other processes running simultaneously on the controller. The server retrieves the HTML, CSS and JS data of the displayed web pages from the SD card file system. Therefore, the web pages and the server can be implemented independently. Retrieving or modifying data is done using the HTTP GET and POST methods.
+
+Certain parameters (brightness of the LEDs, operating mode of the display) can be set via the web interface. In addition, configuration data, such as the access data to the weather service openweather.org or the Wifi data can be edited and saved. These data are also stored in the file system of the SD card and are therefore also available after a reboot.
+
+The user interface of the device has a file browser with which files can be uploaded from the end device (e.g. mobile device) to the SD card or downloaded from the SD card. This is especially usefull for loading image data to the device. In addition, files and entire directories can be deleted, renamed and moved. This simplifies the organization of the flash disk considerably.
+
+Furthermore, the web interface provides a page for converting, uploading, and organizing images ("RDC Image Manager"). Still images can be uploaded in almost any image format and resolution. The software down scales and converts the images into the proprietary ".rdc" format ("rdc" = rotating display color). This format stores the color pixels sequentially, non-compressed, using 3 x 4 bits (1,5 bytes) per pixel.
+
+The RDC Image Manager can also deal with animated GIF files. As the image update rate is limited (about 10 images per second), there is an option to reduce the number of frames of the animated sequence. Please note, that saving an animated ".rdc" file might take a while, as the filesize can be substantial.
+
+** Software architecture**
+The ESP32 software is written in C++. In order to keep an overview despite the large amount of software, the function blocks and the data have been divided into classes. The following is a brief description of the most important classes:
+
+Class RD40
+
+The class provides the central rotating display object. It manages the (private) data of the displayed image (four bits per color and three colors per pixel). The class has methods for displaying bitmaps and for passing data to the display controller.
+
+Class myBMP
+
+This class creates 110x110 color bitmaps for display. It uses private methods to print text on the bitmap, draw lines and circles, or load images.
+
+Class WebInterface
+
+This class manages the web user interface. Once the webInterface object has been initiated, the web server will run in the background without the need for any attention from the software. The class provides certain attributes, such as clockMode and brightness, which are managed by the web interface. The user can change configuration data via the web interface. The data is then stored as parameter files on the SD card.
+
+Not being a software engineer myself, the source code would most certainly benefit from a code review and revision.
+
+** Development Environment **
+
+Visual Studio Code with the PlatformIO extension was used as the development environment for both RP2040 and ESP32. The environment is much faster and more comfortable than the Arduino IDE. The ini files of the respective projects manages all settings, including libraries necessary for compiling. 
+In addition, Visual Studio Code can also be used for the development of the source code of the web pages.
+
+## 8. Reproduction of the rotating display
+All necessary data, such as source code, circuit diagrams, printed board layouts, parts list and sources of supply are included either in this article or in my public github repository. They may be used for non-commercial purposes, such as by hobbyists or in education, whether for reproduction or further development. Either way, please respect the terms of the license.
+The two main boards (display board and power supply board) can be manufactured based on the provided production data. The prototypes were manufactured and assembled by JLCPCB. The production data, including Gerber files, BOM, and component position files, are included in the repository.
+Some components need to be soldered manually, as they are through-hole-components. Please refer to the following description. The assembly is relatively simple, although some soldering skills are required.
+
+## 9. Conclusions
+The rotating color display works according to a simple principle. However, the development of the Rotating Color Display device presented numerous highly interesting engineering challenges. Finding solutions for this was not only very interesting, but an opportunity to learn a wide variety of technologies. Last but not least, it was an intellectual challenge that I enjoyed a lot.
+
+Worth mentioning are:
+
+* Simple design with few mechanical components
+* Replicable wireless power supply with printed coils
+* interlacing for higher resolution and less flickering
+* Complete balancing of the display board to ensure vibration-free operation
+* Timer controlled clocking of the color LEDs and independent regulation of the R, G, and B brightness
+* User-friendly user interface via a standard web browser
+* Retrieval of time and weather data from the internet
+* Display of animated GIF images
+* Implementation of a file browser for the SD card for uploading image data
+* Transparent, object-oriented structure of the ESP32 software
 
 
 
