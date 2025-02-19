@@ -3,6 +3,9 @@
 ## Abstract: 
  The Rotating Color Display is a compact disc-sized device that rotates quietly using a servo motor. It features multiple LEDs that displays images as well as time and weather data sourced from the internet. The device is wirelessly powered and controlled via a user-friendly web interface using an ESP32.
 
+### BOM:
+https://iith-my.sharepoint.com/:x:/g/personal/ee23btech11220_iith_ac_in/Eb25p-EQcuBLmObKBZ19a6YB39MDdF6vqVOBd3wfBGQ2Pw?e=q3nKKc
+
 
  ## 1. Description of the device
  The Rotating Color Display device comprises two primary units: a power supply unit and a display board. The display board is rotated by a servo motor.
