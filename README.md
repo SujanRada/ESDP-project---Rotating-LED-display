@@ -29,3 +29,41 @@ https://iith-my.sharepoint.com/:x:/g/personal/ee23btech11220_iith_ac_in/Eb25p-EQ
   - Enter/change Wi-Fi credentials
   - Upload and manage files
   - Modify display settings
+
+## Operating Modes
+
+### BOOT Behavior and Wi-Fi Setup
+
+- On startup, the device tries connecting to a known Wi-Fi network.
+- If no valid credentials are found, it enters **Access Point (AP) mode**.
+
+  **AP Mode Details:**
+  - **SSID:** ESDP40  
+  - **Password:** *(None — open network)*
+
+- To configure:
+  1. Connect your PC or mobile device to the `ESDP40` Wi-Fi network.
+  2. Open a web browser and navigate to the IP address shown on the device display.
+
+#### Web Interface (Hosted by ESP32)
+
+- Enter Wi-Fi credentials
+- View the device's IP address (if connected to local Wi-Fi)
+- Upload images and modify display configurations
+- Switch between available display modes
+- Manage files stored on the SD card
+
+### Display Modes
+
+- **LOGO Clock Mode:**  
+  Displays an analog clock face along with a customizable logo or image
+
+- **Analog Clock Mode:**  
+  Shows a traditional clock face with customizable visuals
+
+- **Weather and Time Mode:**  
+  Displays current time, weather information, and charging status
+
+### Mode Configuration
+
+All display modes and system settings can be configured via the web user interface.
