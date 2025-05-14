@@ -112,3 +112,69 @@ All display modes and system settings can be configured via the web user interfa
 
 > ⚠️ If the trigger pulse is noisy or misaligned, it may result in flickering or wobbly visuals.
 
+## Electronics Architecture
+
+- A **12–24V DC input** powers the entire system.
+
+### Components
+
+- **Variable Step-Down Converter**  
+  - Adjusts voltage to drive the motor that spins the display.
+
+### Receiving End (on Rotating Display Board)
+
+- AC from wireless coil → **Rectified to DC** → Passed through:
+  1. 5V step-down DC converter
+  2. 3.3V step-down DC converter  
+  → Powers **microcontrollers** and **LEDs**
+
+---
+
+## Display Assembly
+
+### LED Path Control
+
+- 56 RGB LEDs managed using **7 × 24-bit shift registers**
+  - Each shift register controls 8 RGB LEDs  
+    (3 colors × 8 LEDs = 24 bits per register)
+
+### RP2040 Microcontroller
+
+- Interfaces with shift registers via **SPI**
+- Sends data and clock signals to control LEDs
+- Uses **hall sensor** input to trigger LED updates at precise angular positions
+
+### Image Generation Path
+
+- **ESP32-S3 Microcontroller**:
+  - Connects to the internet via Wi-Fi
+  - Reads image data from a **microSD card**
+  - Sends image frames to RP2040 over SPI
+
+### Synchronization
+
+- A **hall-effect sensor** detects fixed positions each rotation
+- Sends a **trigger signal** to the RP2040 to:
+  - Reset angular position
+  - Ensure correct image alignment and smooth refresh
+
+---
+
+### Flow Summaries
+
+#### 🔌 Power Flow:
+12–24V DC → Wireless Power Supply → Wireless Coil → Rectifier → 5V/3.3V Regulators → Electronics
+
+#### 🔄 Data Flow
+ESP32 → SPI → RP2040 → SPI → Shift Registers → LEDs
+
+#### ⏱️ Timing Flow
+Hall Sensor → Trigger → RP2040 → Synchronized LED Updates
+
+
+---
+
+## Power Supply Unit
+
+*Content coming soon...*
+
