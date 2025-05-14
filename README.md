@@ -67,3 +67,48 @@ https://iith-my.sharepoint.com/:x:/g/personal/ee23btech11220_iith_ac_in/Eb25p-EQ
 ### Mode Configuration
 
 All display modes and system settings can be configured via the web user interface.
+
+## Mechanical Design
+
+- The mechanical design consists of two main assemblies:
+  - **Power Supply Board** (stationary)
+  - **Display Board** (rotating)
+
+- A potentiometer is included to control the rotation speed.
+
+- **Wireless Power Alignment:**
+  - The secondary coil on the back of the rotating board aligns with the primary coil on the base.
+  - Power is transferred inductively (eliminates twisting wires).
+
+- **Symmetrical Component Placement:**
+  - Ensures smooth rotation and proper balance.
+  - Aligns the center of mass (COM) with the rotational axis.
+  - Any imbalance in materials can cause the disc to wobble, affecting display clarity and mechanical durability.
+
+### LED Specifications
+
+- 56 rectangular RGB LEDs, each approximately **1.6 mm wide**  
+- Placed on a **2 mm pitch/grid**  
+- The LED row is shifted by **0.5 mm** (not centered)
+
+**Why the 0.5 mm shift?**
+
+- When the disc spins 180°, the 0.5 mm offset causes the LED row to align in between the previous positions, effectively reducing the radial pitch from 2 mm to 1 mm.
+- This creates a **rotational interlacing effect**:
+  - **Doubles the radial resolution** (from 2 mm to 1 mm)
+  - **Doubles the effective frame rate** by smoothly overlapping alternating frames
+
+### Image Synchronization
+
+- The software requires precise rotational phase information to display images correctly.
+
+- A **Hall sensor** detects the "zero" or **home position** and generates a trigger pulse to indicate the start of a new frame.
+
+**Trigger Pulse Function:**
+
+- Resets the angular position counter to **0°**
+- Starts a new frame/image rendering
+- Controller updates LEDs at **precise angular intervals** until the next pulse, ensuring stable and synchronized visuals
+
+> ⚠️ If the trigger pulse is noisy or misaligned, it may result in flickering or wobbly visuals.
+
