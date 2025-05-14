@@ -178,3 +178,120 @@ Hall Sensor → Trigger → RP2040 → Synchronized LED Updates
 
 *Content coming soon...*
 
+## Display Board
+
+### LEDs
+
+- 56 RGB LEDs → 7 cascaded **24-bit shift registers**
+- Registers load **serial data** from an SPI interface of the **RP2040**
+- RP2040 controls **separate enable signals** for R, G, B LEDs
+- Each shift register controls 8 RGB LEDs  
+  → 8 LEDs × 3 colors = 24 bits
+- **Shift Register Used:** `STP24DP05BTR`
+  - Controls up to **24 LEDs**
+  - Ensures **stable current** for each LED channel
+  - Works with MCUs like RP2040 via SPI
+  - Features: **PWM dimming**, **thermal protection**, **open LED detection**
+
+> **Current Sink?**  
+> Yes — STP24DP05BTR pulls current through LEDs to ground.  
+> LED anodes connect to Vcc, cathodes to STP outputs (OUT0 to OUT23).
+
+> **How many LEDs per register?**  
+> Each RGB LED = 3 channels  
+> → 24 / 3 = 8 RGB LEDs per chip  
+> → 56 RGB LEDs → 7 × STP24DP05BTR chips
+
+---
+
+### Current Control
+
+- Each LED channel draws **20mA**
+- Max per shift register = 24 × 20mA = **480mA**
+- Total max = 56 LEDs × 3 × 20mA = **3.36A @5V** = **16.8W**  
+  > *Exceeds wireless power capability!*
+- Brightness is controlled via **PWM (duty cycle)** using RP2040
+- Separate RGB **enable signals** allow **white point correction**
+
+---
+
+### Displaying Color
+
+- Uses **additive color mixing**
+  - e.g., Red + Green = Yellow
+- LEDs are binary (on/off), brightness is adjusted by **PWM**
+- Each pixel → divided into **8 sub-pixels**
+  - 8 brightness levels per R, G, B channel  
+  → 8 × 8 × 8 = **512 colors**
+- Display: **56 radial pixels**, **240 angular pixels**
+
+---
+
+### Timing, Interrupts, and Synchronization
+
+#### SPI Timing
+
+- SPI clock: **25 MHz**
+- 56 RGB LEDs = 168 bits (56 × 3)
+- Transfer time ≈ `168 / 25 MHz ≈ 6.7μs`
+
+#### Rotation Speed
+
+- Max rotation speed: **1200 RPM**
+  - 1200 / 60 = 20 rev/sec
+  - Time per rev = **50ms**
+- Angular resolution = 240 pixels × 8 subpixels = **1920 updates**
+- Time per LED update = `50ms / 1920 ≈ 26μs`
+  - SPI takes only **6.7μs**  
+  → Leaves time for logic/latency handling
+
+---
+
+### RP2040 Software (C-based)
+
+- Uses **2 main interrupt routines**:
+  1. `HALLIRQ` (Hall Sensor Interrupt)
+  2. `PIXELIRQ` (Timer Interrupt)
+
+#### 1. HALLIRQ
+
+- Triggered **once per rotation** by the hall sensor
+- Marks **start of new rotation**
+- Measures **time per turn** (tpt)
+- Calculates `time_per_update = tpt / 1920`
+- Configures hardware timer
+- Starts 1920 pixel updates using timer
+
+#### 2. PIXELIRQ
+
+- Runs every `1/1920` of a turn
+- Sends **168-bit LED pattern**
+- Updates LEDs to show **one sub-pixel** of one angular column
+- Tracks updates to complete a full cycle
+- Repeats when next `HALLIRQ` is triggered
+
+---
+
+### Why Use a Hardware Timer?
+
+*Content coming soon...*
+
+---
+
+### Controlling Brightness (White Balancing)
+
+
+*Content coming soon...*
+
+### ESP32-S3 for Internet communication and image generation
+
+*Content coming soon...*
+
+### Programming of the microcontrollers
+
+*Content coming soon...*
+
+## The Software of the ESP32
+
+*Content coming soon...*
+
