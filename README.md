@@ -30,6 +30,30 @@ https://iith-my.sharepoint.com/:x:/g/personal/ee23btech11220_iith_ac_in/Eb25p-EQ
   - Upload and manage files
   - Modify display settings
 
+## Schematics using KiCAD
+<p align="center"> 
+  <img src="figs/3.3V and 5V step dow schematic image.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+<p align="center"> 
+  <img src="figs/ESP32-S3 schematic image.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+<p align="center"> 
+  <img src="figs/X schematic image.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+<p align="center"> 
+  <img src="figs/STP IC123 schematic image.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+<p align="center"> 
+  <img src="figsSTP IC4567 schematic image.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+<p align="center"> 
+  <img src="figs/RGB LED schematic image1.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+<p align="center"> 
+  <img src="figs/rgb led schematic image2.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+
+
 ## Operating Modes
 
 ### BOOT Behavior and Wi-Fi Setup
