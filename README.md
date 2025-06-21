@@ -44,7 +44,7 @@ https://iith-my.sharepoint.com/:x:/g/personal/ee23btech11220_iith_ac_in/Eb25p-EQ
   <img src="figs/STP IC123 schematic image.png" style="display: inline-block; margin: 20px; max-width: 600px">
 </p>
 <p align="center"> 
-  <img src="figsSTP IC4567 schematic image.png" style="display: inline-block; margin: 20px; max-width: 600px">
+  <img src="figs/STP IC4567 schematic image.png" style="display: inline-block; margin: 20px; max-width: 600px">
 </p>
 <p align="center"> 
   <img src="figs/RGB LED schematic image1.png" style="display: inline-block; margin: 20px; max-width: 600px">
