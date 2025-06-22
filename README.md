@@ -145,10 +145,6 @@ All display modes and system settings can be configured via the web user interfa
 
 ## Mechanical Design
 
-<p align="center"> 
-  <img src="figs/ffinal pcb after fab front image.jpg" style="display: inline-block; margin: 20px; max-width: 600px">
-</p>
-
 - The mechanical design consists of two main assemblies:
   - **Power Supply Board** (stationary)
   - **Display Board** (rotating)
