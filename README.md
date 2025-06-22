@@ -184,6 +184,10 @@ All display modes and system settings can be configured via the web user interfa
 > ⚠️ If the trigger pulse is noisy or misaligned, it may result in flickering or wobbly visuals.
 
 ## Electronics Architecture
+<p align="center"> 
+  <img src="figs/electronics architecture.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+
 
 - A **12–24V DC input** powers the entire system.
 
