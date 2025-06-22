@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/9df89028-2bd8-4ceb-87e9-84b540ceaedc)# Rotating LED Display
+# Rotating LED Display
 
 ## Abstract
 
