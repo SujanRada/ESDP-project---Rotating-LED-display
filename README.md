@@ -32,13 +32,10 @@ https://iith-my.sharepoint.com/:x:/g/personal/ee23btech11220_iith_ac_in/Eb25p-EQ
  
 ## Device
 <p align="center"> 
-  <img src="figs/PCB front image 3D.png" style="display: inline-block; margin: 20px; max-width: 600px">
+  <img src="figs/ffinal pcb after fab front image.jpg" style="display: inline-block; margin: 20px; max-width: 600px">
 </p>
 <p align="center"> 
-  <img src="figs/PCB back image 3D.png" style="display: inline-block; margin: 20px; max-width: 600px">
-</p>
-<p align="center"> 
-  <img src="figs/PCB side image 3D.png" style="display: inline-block; margin: 20px; max-width: 600px">
+  <img src="figs/final pcb after fab back image.heic" style="display: inline-block; margin: 20px; max-width: 600px">
 </p>
 
 ## Schematics using KiCAD
