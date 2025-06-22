@@ -392,7 +392,7 @@ We are using a pre-made 12V 3A Long-Distance Wireless Power Supply Module to del
 
 *Content coming soon...*
 
-## CAD model used for contant and stable wireless power
+## CAD model used for constant and stable wireless power
 <p align="center"> 
   <img src="figs/Solid edge power support design image.png" style="display: inline-block; margin: 20px; max-width: 600px">
 </p>
