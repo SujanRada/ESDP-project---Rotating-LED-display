@@ -250,6 +250,9 @@ Hall Sensor → Trigger → RP2040 → Synchronized LED Updates
 ---
 
 ## Power Supply Unit
+<p align="center"> 
+  <img src="figs/Wireless power circuit image.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
 
 We are using a pre-made 12V 3A Long-Distance Wireless Power Supply Module to deliver power wirelessly.
 
