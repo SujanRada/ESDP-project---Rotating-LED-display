@@ -1,4 +1,4 @@
-# Rotating LED Display
+![image](https://github.com/user-attachments/assets/9df89028-2bd8-4ceb-87e9-84b540ceaedc)# Rotating LED Display
 
 ## Abstract
 
@@ -95,15 +95,11 @@ https://iith-my.sharepoint.com/:x:/g/personal/ee23btech11220_iith_ac_in/Eb25p-EQ
 
 ### Final PCB 3D view
 <p align="center"> 
-  <img src="figs/PCB front image 3D.png" style="display: inline-block; margin: 20px; max-width: 600px">
+  <img src="figs/PCB side image 3D.png" style="display: inline-block; margin: 20px; max-width: 600px">
 </p>
 <p align="center"> 
   <img src="figs/PCB back image 3D.png" style="display: inline-block; margin: 20px; max-width: 600px">
 </p>
-<p align="center"> 
-  <img src="figs/PCB side image 3D.png" style="display: inline-block; margin: 20px; max-width: 600px">
-</p>
-
 
 ## Operating Modes
 
@@ -276,6 +272,10 @@ We are using a pre-made 12V 3A Long-Distance Wireless Power Supply Module to del
 
 
 ## Display Board
+<p align="center"> 
+  <img src="figs/display board image.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+
 
 ### LEDs
 
