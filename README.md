@@ -263,14 +263,13 @@ We are using a pre-made 12V 3A Long-Distance Wireless Power Supply Module to del
 **Note:** Maintain a minimum distance of 5 mm between the coils. Distances less than 5 mm can cause over-voltage and damage the module.
 
 **Distance vs Output Current (12V):**
-_______________________________
+
 | Distance (mm) | Current (A) |
 |---------------|-------------|
 | 5–11          | 3.2–3.0     |
 | 12–15         | 3.1–2.5     |
 | 16–20         | 2.3–1.6     |
 | 21–25         | 1.5–1.1     |
--------------------------------
 
 
 ## Display Board
