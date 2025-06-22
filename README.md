@@ -71,6 +71,39 @@ https://iith-my.sharepoint.com/:x:/g/personal/ee23btech11220_iith_ac_in/Eb25p-EQ
   <img src="figs/rgb led schematic image2.png" style="display: inline-block; margin: 20px; max-width: 600px">
 </p>
 
+## PCB design and layout
+
+### Front layer layout
+<p align="center"> 
+  <img src="figs/front layer PCB layout image.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+
+### GND layer PCB layout
+<p align="center"> 
+  <img src="figs/GND layer PCB layout image.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+
+### 3.3V and 5V layer PCB layout
+<p align="center"> 
+  <img src="figs/3.3V and 5V layer PCB layout image.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+
+### back layer PCB layout
+<p align="center"> 
+  <img src="figs/back layer PCB layput image.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+
+### Final PCB 3D view
+<p align="center"> 
+  <img src="figs/PCB front image 3D.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+<p align="center"> 
+  <img src="figs/PCB back image 3D.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+<p align="center"> 
+  <img src="figs/PCB side image 3D.png" style="display: inline-block; margin: 20px; max-width: 600px">
+</p>
+
 
 ## Operating Modes
 
