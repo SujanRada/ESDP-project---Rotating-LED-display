@@ -1,0 +1,26 @@
+Drill report for display.kicad_pcb
+Created on 2025-04-06T22:46:39+0530
+
+Copper Layer Stackup:
+    =============================================================
+    L1 :  F.Cu                      front
+    L1 :  B.Cu                      back
+    L1 :  In1.Cu                    in1
+    L1 :  In2.Cu                    in2
+
+
+Drill file 'display-PTH.drl' contains
+    plated through holes:
+    =============================================================
+    T1  0.300mm  0.0118"  (672 holes)
+    T2  0.400mm  0.0157"  (323 holes)
+
+    Total plated holes count 995
+
+
+Drill file 'display-NPTH.drl' contains
+    unplated through holes:
+    =============================================================
+    T1  0.650mm  0.0256"  (4 holes)
+
+    Total unplated holes count 4
